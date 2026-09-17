@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ollama-gateway
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: ollama-gateway
+
+  template:
+    metadata:
+      labels:
+        app: ollama-gateway
+
+    spec:
+      containers:
+        - name: gateway
+
+          image: ollama-inference-gateway:1.0
+          imagePullPolicy: IfNotPresent
+
+          env:
+            - name: OLLAMA_URL
+              value: "http://host.minikube.internal:11434"
+
+            - name: OLLAMA_MODEL
+              value: "phi3:mini"
+
+            - name: CPU_WORK_MS
+              value: "2000"
+
+          ports:
+            - name: http
+              containerPort: 8070
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "64Mi"
+
+            limits:
+              cpu: "500m"
+              memory: "128Mi"
+
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 12
+
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: ollama-gateway-service
+
+spec:
+  type: ClusterIP
+
+  selector:
+    app: ollama-gateway
+
+  ports:
+    - name: http
+      port: 8070
+      targetPort: 8070
