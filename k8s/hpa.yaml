@@ -1,37 +1,36 @@
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
+# ============================================================
+# k8s/hpa.yaml
+# ============================================================
+# This file is intentionally incomplete. Write the
+# HorizontalPodAutoscaler described by the TODO below, directly
+# beneath this comment block, in the default namespace.
+# ============================================================
 
-metadata:
-  name: ollama-gateway-hpa
-
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: ollama-gateway
-
-  minReplicas: 1
-  maxReplicas: 2
-
-  behavior:
-    scaleUp:
-      stabilizationWindowSeconds: 0
-      policies:
-        - type: Pods
-          value: 1
-          periodSeconds: 30
-
-    scaleDown:
-      stabilizationWindowSeconds: 60
-      policies:
-        - type: Pods
-          value: 1
-          periodSeconds: 60
-
-  metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 25
+# ------------------------------------------------------------
+# TODO 1 — HorizontalPodAutoscaler
+# ------------------------------------------------------------
+# Create an autoscaling/v2 HorizontalPodAutoscaler named:
+#     ollama-gateway-hpa
+#
+#   • spec.scaleTargetRef:
+#         apiVersion: apps/v1
+#         kind:       Deployment
+#         name:       ollama-gateway   (the Deployment from Task 6)
+#
+#   • spec.minReplicas: 1
+#     spec.maxReplicas: 2
+#
+#   • spec.behavior.scaleUp:
+#         stabilizationWindowSeconds: 0
+#         one policy — type: Pods, value: 1, periodSeconds: 30
+#
+#   • spec.behavior.scaleDown:
+#         stabilizationWindowSeconds: 60
+#         one policy — type: Pods, value: 1, periodSeconds: 60
+#
+#   • spec.metrics:
+#         one Resource metric on cpu,
+#         target type: Utilization, averageUtilization: 25
+#
+# Write your HorizontalPodAutoscaler YAML below this line.
+# ------------------------------------------------------------
